@@ -53,13 +53,14 @@ export function attachWebSocketServer(server){
             }
             socket.isAlive = false;
             socket.ping();
-        },30000);
+        },30000)
+    })
 
 
         wss.on("close",()=>{
             clearInterval(Interval);
         });
-        
+
     function broadcastMatchCreated(match){
         broadcast(wss,{type:"matchCreated",data:match});
     }
