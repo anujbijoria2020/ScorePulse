@@ -28,7 +28,16 @@ export function attachWebSocketServer(server){
     });
 
     wss.on("connection",(socket)=>{
+       
+        wss.on("connection", (socket)=>{
+            socket.isAlive = true;
+            socket.on("pong",()=>{
+                socket.isAlive = true;
+            })
+        })
+
         console.log("New WebSocket connection established");
+
         sendJSON(socket,{type:"welcome",message:"Welcome to the Sports Match API WebSocket!"});
 
         socket.on("error",(error)=>{
@@ -36,6 +45,21 @@ export function attachWebSocketServer(server){
         });
     });
 
+    const Interval = setInterval(()=>{
+        wss.clients.forEach((socket)=>{
+            if(socket.isAlive===false){
+                console.log("Terminating unresponsive WebSocket connection");
+                return socket.terminate();
+            }
+            socket.isAlive = false;
+            socket.ping();
+        },30000);
+
+
+        wss.on("close",()=>{
+            clearInterval(Interval);
+        });
+        
     function broadcastMatchCreated(match){
         broadcast(wss,{type:"matchCreated",data:match});
     }
