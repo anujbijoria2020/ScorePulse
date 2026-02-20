@@ -28,6 +28,8 @@ matchRouter.get("/", async (req, res) => {
 try{
 const data = await db.select().from(matches).orderBy(desc(matches.startTime)).limit(limit);
 
+
+
 return res.json({
   success:true,
   message:"Matches retrieved successfully",
@@ -67,6 +69,10 @@ matchRouter.post("/", async (req, res) => {
         status: getMatchStatus(startTime, endTime),
       })
       .returning();
+
+    if(res.app.locals.broadCastMatchCreated){
+      res.app.locals.broadCastMatchCreated(event);
+    }
 
     return res.status(201).json({
       success: true,
