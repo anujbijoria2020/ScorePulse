@@ -66,13 +66,15 @@ export function attachWebSocketServer(server) {
   });
 
   const interval = setInterval(() => {
-    wss.clients.forEach((socket) => {
-      if (socket.isAlive === false) {
-        return socket.terminate();
-      }
-      socket.isAlive = false;
+     for(const socket of wss.clients){
+        if(socket.isAlive===false){
+            console.log("Terminating unresponsive WebSocket connection");
+            socket.terminate();
+            continue;
+        }
+             socket.isAlive = false;
       socket.ping();
-    });
+     }
   }, 30000);
 
   wss.on("close", () => {

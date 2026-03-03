@@ -17,11 +17,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-app.get("/", (req, res) => {
-  res.json({ message: "SportBroadcast server is running." });
-});
-
 console.log("matchRouter value:", matchRouter);
 
 app.use(securityMiddleware());
