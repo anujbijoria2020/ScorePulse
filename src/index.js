@@ -11,6 +11,7 @@ const app = express();
 const server = http.createServer(app);
 
 
+app.use(securityMiddleware());
 app.use(express.json());
 app.use((req, res, next) => {
   console.log("Incoming:", req.method, req.url);
@@ -19,7 +20,6 @@ app.use((req, res, next) => {
 
 console.log("matchRouter value:", matchRouter);
 
-app.use(securityMiddleware());
 app.use("/api/matches",matchRouter);
 
 const {broadCastMatchCreated} = attachWebSocketServer(server);
