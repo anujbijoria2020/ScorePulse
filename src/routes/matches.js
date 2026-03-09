@@ -70,8 +70,11 @@ matchRouter.post("/", async (req, res) => {
       })
       .returning();
 
-    if(res.app.locals.broadCastMatchCreated){
-      res.app.locals.broadCastMatchCreated(event);
+    const notifyMatchCreated =
+      res.app.locals.broadcastMatchCreated ?? res.app.locals.broadCastMatchCreated;
+
+    if (notifyMatchCreated) {
+      notifyMatchCreated(event);
     }
 
     return res.status(201).json({

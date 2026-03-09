@@ -13,7 +13,17 @@ arcjet({
 key:arcjetKey,
 rules:[
     shield({mode:arcjetMode}),
-    detectBot({mode:arcjetMode,allow:["Googlebot","Bingbot","Slurp","CATEGORY:SEARCH_ENGINE","CATEGORY:PREVIEW"]}),
+    detectBot({
+      mode: arcjetMode,
+      allow: [
+        "Googlebot",
+        "Bingbot",
+        "Slurp",
+        "POSTMAN",
+        "CATEGORY:SEARCH_ENGINE",
+        "CATEGORY:PREVIEW",
+      ],
+    }),
     slidingWindow({mode:arcjetMode,interval:'10s',max:50})
 ]
 }):null;
@@ -23,7 +33,7 @@ arcjet({
 key:arcjetKey,
 rules:[
     shield({mode:arcjetMode}),
-    detectBot({mode:arcjetMode,allow:["Googlebot","Bingbot","Slurp","CATEGORY:SEARCH_ENGINE","CATEGORY:PREVIEW"]}),
+    detectBot({mode:arcjetMode,allow:["CATEGORY:SEARCH_ENGINE","CATEGORY:PREVIEW","POSTMAN",]}),
     slidingWindow({mode:arcjetMode,interval:'2s',max:5})
 ]
 }):null;
@@ -35,16 +45,16 @@ export function securityMiddleware(){
             return next();
         }
         try{
-           const desicion = await httpArcjet.protect(req);
+           const decision = await httpArcjet.protect(req);
 
-           if(desicion.isDenied()){
-               if(desicion.reason.isRateLimit()){
+           if(decision.isDenied()){
+               if(decision.reason.isRateLimit()){
                      return res.status(429).json({
-                        error:"Too Many Requests"
+                        error:"rate_limit"
                     });
                     }
                     return res.status(403).json({
-                        error:"Forbidden"
+                        error:"forbidden"
                     });
                }
            }
