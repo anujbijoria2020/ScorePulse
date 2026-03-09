@@ -45,16 +45,16 @@ export function securityMiddleware(){
             return next();
         }
         try{
-           const desicion = await httpArcjet.protect(req);
+           const decision = await httpArcjet.protect(req);
 
-           if(desicion.isDenied()){
-               if(desicion.reason.isRateLimit()){
+           if(decision.isDenied()){
+               if(decision.reason.isRateLimit()){
                      return res.status(429).json({
-                        error:"Too Many Requests"
+                        error:"rate_limit"
                     });
                     }
                     return res.status(403).json({
-                        error:desicion.reason
+                        error:"forbidden"
                     });
                }
            }
