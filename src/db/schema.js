@@ -1,4 +1,5 @@
 import {
+  index,
   integer,
   jsonb,
   pgEnum,
@@ -27,7 +28,10 @@ export const matches = pgTable("matches", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
-});
+}, (table) => ({
+  startTimeIdx: index("matches_start_time_idx").on(table.startTime),
+  statusIdx: index("matches_status_idx").on(table.status),
+}));
 
 export const commentary = pgTable("commentary", {
   id: serial("id").primaryKey(),
