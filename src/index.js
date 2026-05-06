@@ -4,6 +4,7 @@ AgentAPI.config();
 import express from "express";
 import cors from "cors";
 import http from "http";
+import compression from "compression";
 import { matchRouter } from "./routes/matches.js";
 import { commentaryRouter } from "./routes/commentary.js";
 import { attachWebSocketServer } from "./ws/server.js";
@@ -25,6 +26,7 @@ app.use(
 );
 
 // ── Core middleware ──────────────────────────────────────────────────────────
+app.use(compression());
 app.use(securityMiddleware());
 app.use(express.json());
 app.use((req, _res, next) => {

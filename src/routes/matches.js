@@ -26,7 +26,18 @@ matchRouter.get("/", async (req, res) => {
 
   const limit = Math.min(parsed.data.limit??50,MAX_LIMIT);
 try{
-const data = await db.select().from(matches).orderBy(desc(matches.startTime)).limit(limit);
+const data = await db.select({
+  id: matches.id,
+  sport: matches.sport,
+  homeTeam: matches.homeTeam,
+  awayTeam: matches.awayTeam,
+  status: matches.status,
+  startTime: matches.startTime,
+  endTime: matches.endTime,
+  homeScore: matches.homeScore,
+  awayScore: matches.awayScore,
+  createdAt: matches.createdAt
+}).from(matches).orderBy(desc(matches.startTime)).limit(limit);
 
 
 
